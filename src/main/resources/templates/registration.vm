@@ -11,41 +11,94 @@
     #parse ("common/header.vm")
 
 <div class="container register-form">
-    <div class="form">
+    <div class="form" id="submit_form">
         <div class="note">
             <p>Java Meet up</p>
         </div>
 
         <div class="form-content">
+            <div id="response"></div>
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Your Name *" value=""/>
+                        <input type="text" class="form-control" placeholder="Your Name *" id="name"/>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Phone Number *" value=""/>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Your Password *" value=""/>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Confirm Password *" value=""/>
+                        <input type="text" class="form-control" placeholder="Phone Number *" id="phone_number" />
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Mail *" value=""/>
+                        <input type="text" class="form-control" placeholder="Your Password *" id="pass" />
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Confirm Password *" id="re_pass" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Mail *" id="mail"/>
                     </div>
                 </div>
             </div>
-            <button type="button" class="btnSubmit">Submit</button>
+            <button type="submit" id="submit_button" class="btnSubmit">Submit</button>
         </div>
     </div>
+
 </div>
     #parse ("common/footer.vm")
 </body>
+<script>
+
+    function isNotEmpty(obj){
+        var flag = true;
+        Object.keys(obj).forEach(function(key){
+            console.log(obj[key] === "",key);
+            if (obj[key] === '') flag = false ;
+        });
+        return flag ;
+    }
+
+
+    function saveForm(){
+        var object = {};
+        object['name']= $('#name').val();
+        object['mail']= $('#mail').val();
+        object['pass']= $('#pass').val();
+        object['re_pass']= $('#re_pass').val();
+        object['phoneNumber']= $('#phone_number').val();
+
+        console.log(object,isNotEmpty(object)   );
+        if(!isNotEmpty(object))
+        {
+            $('#response').html('<span class="text-danger">All Fields are required</span>');
+            return;
+        }
+        console.log($('#submit_form').serialize());
+        $.ajax({
+            method: "POST",
+            url: "/register",
+            data:JSON.stringify(object  ),
+            dataType: 'json',
+            contentType: 'application/json',
+            mimeType: 'application/json',
+            success: function(status){
+                if(status) {
+                    // $('#response').html('');
+                    //here you check the response from your controller and add your business logic
+                }
+            }
+        });
+    }
+
+
+    $(function() {
+        $('#submit_button').click(saveForm);
+    });
+
+
+
+</script>
 
 
 </html>

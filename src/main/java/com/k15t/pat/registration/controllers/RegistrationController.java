@@ -1,17 +1,25 @@
-package com.k15t.pat.registration;
+package com.k15t.pat.registration.controllers;
 
+
+import io.swagger.api.UserRegistrationApi;
+import io.swagger.model.UserDetails;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.StringWriter;
+import java.util.concurrent.CompletableFuture;
 
 
 @RestController
-public class RegistrationController {
+public class RegistrationController implements UserRegistrationApi {
 
     @Autowired private VelocityEngine velocityEngine;
 
@@ -25,5 +33,12 @@ public class RegistrationController {
         template.merge(context, writer);
 
         return writer.toString();
+    }
+
+    @RequestMapping(value="/register", method= RequestMethod.POST)
+    @Override
+    public CompletableFuture<ResponseEntity<Void>> register(@RequestBody UserDetails userDetails){
+       userDetails.getName();
+       return  CompletableFuture.completedFuture(new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED));
     }
 }

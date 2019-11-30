@@ -1,0 +1,47 @@
+swagger: '2.0'
+info:
+  title: Registration End point
+  description: Registratino Api 1.0.0
+  version: 1.0.0
+schemes:
+  - http
+basePath: "/"
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /register:
+    post:
+      operationId: register
+      summary: User Registration Endpoint.
+      description: >
+        This API is used to register users.
+      tags:
+        - user Registration
+    parameters:
+    - in: "body"
+      name: "body"
+      description: "user details"
+      required: true
+      schema:
+        $ref: '#/definitions/UserDetails'
+    responses:
+      '201':
+        description: Created
+definitions:
+  UserDetails:
+      required:
+        - name
+        - phoneNumber
+        - mail
+        - password
+      properties:
+        name:
+          type: string
+        phoneNumber:
+          type: string
+        mail:
+          type: string
+        password:
+          type: string
