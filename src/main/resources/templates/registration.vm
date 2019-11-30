@@ -64,8 +64,8 @@
         var object = {};
         object['name']= $('#name').val();
         object['mail']= $('#mail').val();
-        object['pass']= $('#pass').val();
-        object['re_pass']= $('#re_pass').val();
+        object['password']= $('#pass').val();
+        object['re_password']= $('#re_pass').val();
         object['phoneNumber']= $('#phone_number').val();
 
         console.log(object,isNotEmpty(object)   );

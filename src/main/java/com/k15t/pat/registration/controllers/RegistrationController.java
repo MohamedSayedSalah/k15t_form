@@ -1,6 +1,7 @@
 package com.k15t.pat.registration.controllers;
 
 
+import com.k15t.pat.registration.services.UserService;
 import io.swagger.api.UserRegistrationApi;
 import io.swagger.model.UserDetails;
 import org.apache.velocity.Template;
@@ -21,8 +22,11 @@ import java.util.concurrent.CompletableFuture;
 @RestController
 public class RegistrationController implements UserRegistrationApi {
 
-    @Autowired private VelocityEngine velocityEngine;
+    @Autowired
+    private VelocityEngine velocityEngine;
 
+    @Autowired
+    private UserService userService;
 
     @RequestMapping("/registration.html")
     public String registration() {
@@ -38,7 +42,7 @@ public class RegistrationController implements UserRegistrationApi {
     @RequestMapping(value="/register", method= RequestMethod.POST)
     @Override
     public CompletableFuture<ResponseEntity<Void>> register(@RequestBody UserDetails userDetails){
-       userDetails.getName();
+        userService.registerUser(userDetails);
        return  CompletableFuture.completedFuture(new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED));
     }
 }
