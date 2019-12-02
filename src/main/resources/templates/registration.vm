@@ -1,14 +1,28 @@
 <html>
 <head>
-    <title>PAT Registration</title>
+    <title>K15T</title>
     <script src="https://code.jquery.com/jquery-3.1.0.min.js"
             integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
           integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="../public/css/app.css">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </head>
 <body>
     #parse ("common/header.vm")
+
+<div class="alert alert-success" id="success-alert">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong>Success! </strong> User Saved
+</div>
+
+<div class="alert alert-danger" id="failed-alert">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong>Failed! </strong> Some thing Went Wrong
+</div>
+
+
+
 
 <div class="container register-form">
     <div class="form" id="submit_form">
@@ -17,22 +31,21 @@
         </div>
 
         <div class="form-content">
-            <div id="response"></div>
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
                         <input type="text" class="form-control" placeholder="Your Name *" id="name"/>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Phone Number *" id="phone_number" />
+                        <input type="text" class="form-control" placeholder="Phone Number *" id="phone_number"/>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Your Password *" id="pass" />
+                        <input type="text" class="form-control" placeholder="Your Password *" id="pass"/>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Confirm Password *" id="re_pass" />
+                        <input type="text" class="form-control" placeholder="Confirm Password *" id="re_pass"/>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -44,58 +57,68 @@
             <button type="submit" id="submit_button" class="btnSubmit">Submit</button>
         </div>
     </div>
-
 </div>
     #parse ("common/footer.vm")
 </body>
 <script>
 
-    function isNotEmpty(obj){
+    $(document).ready(function() {
+        $("#success-alert").hide();
+        $("#failed-alert").hide();
+
+    });
+
+    /**
+     * @param obj input fields
+     *
+     * check whether all input fields is present or not
+     * @returns {boolean}
+     */
+
+    function isNotEmpty(obj) {
         var flag = true;
-        Object.keys(obj).forEach(function(key){
-            console.log(obj[key] === "",key);
-            if (obj[key] === '') flag = false ;
+        Object.keys(obj).forEach(function (key) {
+            if (obj[key] === '') flag = false;
         });
-        return flag ;
+        return flag;
     }
 
 
-    function saveForm(){
+    function saveForm() {
         var object = {};
-        object['name']= $('#name').val();
-        object['mail']= $('#mail').val();
-        object['password']= $('#pass').val();
-        object['re_password']= $('#re_pass').val();
-        object['phoneNumber']= $('#phone_number').val();
+        object['name'] = $('#name').val();
+        object['mail'] = $('#mail').val();
+        object['password'] = $('#pass').val();
+        object['re_password'] = $('#re_pass').val();
+        object['phoneNumber'] = $('#phone_number').val();
 
-        console.log(object,isNotEmpty(object)   );
-        if(!isNotEmpty(object))
-        {
-            $('#response').html('<span class="text-danger">All Fields are required</span>');
+        if (!isNotEmpty(object) || !$('#name').val().match(/^[A-Za-z]+$/) ||  $('#re_pass').val() !== $('#pass').val() ) {
+            $("#failed-alert").fadeTo(2000, 500).slideUp(500, function() {
+                $("#failed-alert").slideUp(500);
+            });
             return;
         }
-        console.log($('#submit_form').serialize());
+
+
         $.ajax({
             method: "POST",
             url: "/register",
-            data:JSON.stringify(object  ),
+            data: JSON.stringify(object),
             dataType: 'json',
             contentType: 'application/json',
             mimeType: 'application/json',
-            success: function(status){
-                if(status) {
-                    // $('#response').html('');
-                    //here you check the response from your controller and add your business logic
-                }
+            success: function (status) {
+                $("#success-alert").fadeTo(2000, 500).slideUp(500, function() {
+                    $("#success-alert").slideUp(500);
+                });
             }
         });
     }
 
 
-    $(function() {
+    $(function () {
         $('#submit_button').click(saveForm);
     });
-
 
 
 </script>

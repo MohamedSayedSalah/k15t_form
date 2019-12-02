@@ -27,7 +27,7 @@ paths:
       schema:
         $ref: '#/definitions/UserDetails'
     responses:
-      '201':
+      '204':
         description: Created
 definitions:
   UserDetails:

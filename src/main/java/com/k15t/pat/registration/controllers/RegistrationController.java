@@ -39,10 +39,19 @@ public class RegistrationController implements UserRegistrationApi {
         return writer.toString();
     }
 
+
+    /**
+     *
+     * @param userDetails
+     * map request body to Dto using swagger
+     *
+     *
+     * @return 204
+     */
     @RequestMapping(value="/register", method= RequestMethod.POST)
     @Override
     public CompletableFuture<ResponseEntity<Void>> register(@RequestBody UserDetails userDetails){
         userService.registerUser(userDetails);
-       return  CompletableFuture.completedFuture(new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED));
+       return  CompletableFuture.completedFuture(new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
 }
